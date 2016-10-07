@@ -3,7 +3,13 @@ package fr.chaussadeFourrier.carshop.model;
 public class Office
 {
 
-	private String officeCode, city, phone, addressLine, state, country, postalCode;
+	private String addressLine;
+	private String city;
+	private String country;
+	private String officeCode;
+	private String phone;
+	private String postalCode;
+	private String state;
 
 	public Office(String officeCode, String city, String phone, String addressLine, String state, String country, String postalCode)
 	{

@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import fr.cchaussade.carshop.controller.Database;
+import fr.chaussadeFourrier.carshop.controller.Database;
 
 public class Main
 {
