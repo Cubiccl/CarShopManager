@@ -1,4 +1,4 @@
-package fr.cchaussade.carshop;
+package fr.chaussadeFourrier.carshop;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

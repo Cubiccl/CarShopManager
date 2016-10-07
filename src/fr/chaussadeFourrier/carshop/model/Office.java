@@ -1,4 +1,4 @@
-package fr.cchaussade.carshop.model;
+package fr.chaussadeFourrier.carshop.model;
 
 public class Office
 {
