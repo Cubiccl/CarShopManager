@@ -21,6 +21,9 @@ public class Employee
 		this.reportsTo = reportsTo;
 		this.jobTitle = jobTitle;
 	}
+	
+	public Employee(){
+	}
 
 	public String getEmail()
 	{

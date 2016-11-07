@@ -23,6 +23,9 @@ public class Order
 		this.comments = comments;
 		this.customerNumber = customerNumber;
 	}
+	
+	public Order(){
+	}
 
 	public String getComments()
 	{

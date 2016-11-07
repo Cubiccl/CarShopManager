@@ -21,6 +21,9 @@ public class Office
 		this.country = country;
 		this.postalCode = postalCode;
 	}
+	
+	public Office(){
+	}
 
 	public String getAddressLine()
 	{

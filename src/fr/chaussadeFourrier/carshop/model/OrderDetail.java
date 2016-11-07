@@ -17,6 +17,9 @@ public class OrderDetail
 		this.priceEach = priceEach;
 		this.orderLineNumber = orderLineNumber;
 	}
+	
+	public OrderDetail(){
+	}
 
 	public int getOrderLineNumber()
 	{

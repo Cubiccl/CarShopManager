@@ -29,6 +29,9 @@ public class Customer
 		this.salesRepEmployeeNumber = salesRepEmployeeNumber;
 	}
 
+	public Customer() {
+	}
+
 	public String getCity()
 	{
 		return this.city;

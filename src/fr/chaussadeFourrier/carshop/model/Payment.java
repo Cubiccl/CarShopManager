@@ -17,6 +17,9 @@ public class Payment
 		this.paymentDate = paymentDate;
 		this.amount = amount;
 	}
+	
+	public Payment(){
+	}
 
 	public double getAmount()
 	{

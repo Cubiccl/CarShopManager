@@ -3,18 +3,20 @@ package fr.chaussadeFourrier.carshop.model;
 public class ProductLine
 {
 
-	private String description;
+	private String textDescription;
 	private String productLine;
 
 	public ProductLine(String productLine, String description)
 	{
 		this.productLine = productLine;
-		this.description = description;
+		this.textDescription = description;
+	}
+	public ProductLine(){
 	}
 
-	public String getDescription()
+	public String getTextDescription()
 	{
-		return this.description;
+		return this.textDescription;
 	}
 
 	public String getProductLine()
@@ -22,9 +24,9 @@ public class ProductLine
 		return this.productLine;
 	}
 
-	public void setDescription(String description)
+	public void setTextDescription(String description)
 	{
-		this.description = description;
+		this.textDescription = description;
 	}
 
 	public void setProductLine(String productLine)
