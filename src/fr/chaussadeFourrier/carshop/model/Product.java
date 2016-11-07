@@ -18,7 +18,6 @@ public class Product
 	public Product(String productCode, String productName, String productLine, ImageIcon photo, String productVendor, String productDescription,
 			int quantityInStock, double buyPrice, double msrp)
 	{
-		super();
 		this.productCode = productCode;
 		this.productName = productName;
 		this.productLine = productLine;
@@ -28,6 +27,9 @@ public class Product
 		this.quantityInStock = quantityInStock;
 		this.buyPrice = buyPrice;
 		this.msrp = msrp;
+	}
+
+	public Product() {
 	}
 
 	public double getBuyPrice()
