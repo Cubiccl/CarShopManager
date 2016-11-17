@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
 import fr.chaussadeFourrier.carshop.model.Order;
-import fr.chaussadeFourrier.carshop.model.ProductLine;
 
 public class OrderDAO extends DAO<Order> {
 

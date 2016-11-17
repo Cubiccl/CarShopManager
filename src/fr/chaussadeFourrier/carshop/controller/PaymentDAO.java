@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
 import fr.chaussadeFourrier.carshop.model.Payment;
-import fr.chaussadeFourrier.carshop.model.ProductLine;
 
 public class PaymentDAO extends DAO<Payment> {
 
