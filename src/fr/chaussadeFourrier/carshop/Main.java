@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import fr.chaussadeFourrier.carshop.controller.Database;
+import fr.chaussadeFourrier.carshop.view.Window;
 
 public class Main
 {
@@ -53,11 +54,10 @@ public class Main
 
 	public static void main(String[] args)
 	{
-		Connection connection = Database.getConnection();
-		if (connection == null) Database.closeConnection();
+		Window window = new Window();
+		window.setVisible(true);
 
-		requestCustomers(connection, "USA", "2013");
-		Database.closeConnection();
+		// Connection connection = Database.getConnection(); if (connection == null) Database.closeConnection(); TODO: uncomment this when done testing.
 	}
 
 	/** Requests and displays the Customers from a country that ordered in a year.
@@ -65,6 +65,7 @@ public class Main
 	 * @param connection - The connection to the database.
 	 * @param country - A country
 	 * @param year - A year */
+	@SuppressWarnings("unused")
 	private static void requestCustomers(Connection connection, String country, String year)
 	{
 		System.out.println("Customers from " + country + " who ordered in the year " + year + " :");

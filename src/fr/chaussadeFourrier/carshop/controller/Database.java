@@ -54,7 +54,8 @@ public final class Database
 			e.printStackTrace();
 		}
 
-		System.out.println("Connected !");
+		if (connection != null) System.out.println("Connected !");
+		else System.out.println("Connection failed.");
 	}
 
 	/** Creates a Statement for the Database.
