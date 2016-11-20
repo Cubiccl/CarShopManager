@@ -60,23 +60,25 @@ public class Window extends JFrame implements ActionListener
 	 * @param tabID - The ID of the new tab. See {@link Window#TAB_PRODUCTS}. */
 	private void setTab(int tabID)
 	{
+		this.getContentPane().removeAll();
 		switch (tabID)
 		{
 			case TAB_PRODUCTS:
-				this.setContentPane(new ProductsPanel());
+				this.getContentPane().add(new ProductsPanel());
 				break;
 
 			case TAB_SALES:
-				this.setContentPane(new SalesPanel());
+				this.getContentPane().add(new SalesPanel());
 				break;
 
 			case TAB_FREE:
-				this.setContentPane(new FreePanel());
+				this.getContentPane().add(new FreePanel());
 				break;
 
 			default:
 				break;
 		}
+		this.revalidate();
 	}
 
 }
