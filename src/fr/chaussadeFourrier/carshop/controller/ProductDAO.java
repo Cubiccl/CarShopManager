@@ -20,6 +20,7 @@ public class ProductDAO extends DAO<Product> {
 	}
 
 	public static Blob imageIconToBlob(ImageIcon icon) {
+		if (icon == null) return null;
 		Blob blob = null;
 		try {
 			Image img = icon.getImage();
