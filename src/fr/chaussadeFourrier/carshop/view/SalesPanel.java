@@ -125,6 +125,7 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 
 		this.setTopComponent(panelTop);
 		this.setBottomComponent(this.panelResult);
+		this.setDividerSize(3);
 	}
 
 	@Override

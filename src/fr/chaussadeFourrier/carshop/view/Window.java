@@ -25,7 +25,7 @@ public class Window extends JFrame implements ActionListener
 	public Window()
 	{
 		super("Car Shop Manager");
-		this.setSize(800, 600);
+		this.setSize(900, 700);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 

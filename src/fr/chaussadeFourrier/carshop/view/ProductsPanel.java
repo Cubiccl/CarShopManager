@@ -172,6 +172,7 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 			}
 		});
 		this.toggleDetails();
+		this.setDividerSize(3);
 	}
 
 	@Override
