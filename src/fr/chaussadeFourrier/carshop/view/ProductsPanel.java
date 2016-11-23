@@ -16,6 +16,7 @@ import javax.swing.JSplitPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import fr.chaussadeFourrier.carshop.Main;
 import fr.chaussadeFourrier.carshop.controller.Database;
 import fr.chaussadeFourrier.carshop.controller.ProductDAO;
 import fr.chaussadeFourrier.carshop.model.Product;
@@ -39,14 +40,14 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 	private CLabel labelCode, labelVendor, labelMSRP;
 	private JLabel labelImage;
 	private CPanel panelList, panelDetails;
-	private JScrollPane scrollpaneTable;
+	private JScrollPane scrollpaneTable, scrollpaneDetails;
 	private CTable table;
 
 	public ProductsPanel()
 	{
 		super(VERTICAL_SPLIT);
 
-		this.detailsShowed = false;
+		this.detailsShowed = true;
 
 		this.table = new CTable(this.getData(), COLUMNS)
 		{
@@ -63,7 +64,6 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 
 		this.panelList = new CPanel("Product list");
 		this.panelDetails = new CPanel("Product details");
-		this.panelDetails.setVisible(false);
 
 		GridBagConstraints gbc = this.panelList.createGridBagLayout();
 		gbc.fill = GridBagConstraints.BOTH;
@@ -133,7 +133,8 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 		this.buttonCancel.addActionListener(this);
 
 		this.setTopComponent(this.panelList);
-		this.setBottomComponent(new JScrollPane(this.panelDetails));
+		this.setBottomComponent(this.scrollpaneDetails = new JScrollPane(this.panelDetails));
+		this.scrollpaneDetails.getVerticalScrollBar().setUnitIncrement(20);
 		this.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener()
 		{
 			@Override
@@ -142,20 +143,34 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 				resizeTable();
 			}
 		});
+		this.toggleDetails();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == this.buttonShow) this.toggleDetails();
-		if (e.getSource() == this.buttonValidate) this.applyChanges();
-		if (e.getSource() == this.buttonCancel) this.showDetails(this.selectedProduct());
+		if (e.getSource() == this.buttonShow)
+		{
+			if (this.table.getSelectedRow() != -1) this.toggleDetails();
+		} else if (e.getSource() == this.buttonValidate) this.applyChanges();
+		else if (e.getSource() == this.buttonCancel) this.showDetails(this.selectedProduct());
 	}
 
 	private void applyChanges()
 	{
-		// TODO Auto-generated method stub
-
+		try
+		{
+			Database.getConnection()
+					.createStatement()
+					.executeUpdate(
+							"UPDATE products SET productName = '" + this.entryName.getText() + "', quantityInStock = " + this.entryQuantity.getText()
+									+ ", buyPrice = " + this.entryPrice.getText() + ", productDescription = '" + this.areaDescription.getText()
+									+ "' WHERE productCode = '" + this.selectedProduct().getProductCode() + "';");
+			Main.getWindow().setTab(Window.TAB_PRODUCTS);
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	private String[][] getData()
@@ -215,9 +230,12 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 	private void toggleDetails()
 	{
 		this.detailsShowed = !this.detailsShowed;
-		this.panelDetails.setVisible(this.detailsShowed);
-		if (this.detailsShowed) this.buttonShow.setText("Hide details");
-		else this.buttonShow.setText("Show details");
+		this.scrollpaneDetails.setVisible(this.detailsShowed);
+		if (this.detailsShowed)
+		{
+			this.buttonShow.setText("Hide details");
+			this.setDividerLocation(this.getHeight() / 2);
+		} else this.buttonShow.setText("Show details");
 	}
 
 	@Override

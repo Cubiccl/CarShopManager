@@ -17,7 +17,7 @@ public class Window extends JFrame implements ActionListener
 	 * <li>TAB_SALES=1 : Sales Management.</li>
 	 * <li>TAB_FREE=2 : Free SQL Selections.</li>
 	 * </ul> */
-	private static final int TAB_PRODUCTS = 0, TAB_SALES = 1, TAB_FREE = 2;
+	public static final int TAB_PRODUCTS = 0, TAB_SALES = 1, TAB_FREE = 2;
 
 	private CMenuItem menuProducts, menuSales, menuFree;
 
@@ -58,7 +58,7 @@ public class Window extends JFrame implements ActionListener
 	/** Changes the current tab. Called when a menu button is pressed.
 	 * 
 	 * @param tabID - The ID of the new tab. See {@link Window#TAB_PRODUCTS}. */
-	private void setTab(int tabID)
+	public void setTab(int tabID)
 	{
 		this.getContentPane().removeAll();
 		switch (tabID)

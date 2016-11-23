@@ -5,16 +5,32 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.SwingUtilities;
+
 import fr.chaussadeFourrier.carshop.controller.Database;
 import fr.chaussadeFourrier.carshop.view.Window;
 
 public class Main
 {
+	private static Window window;
+
+	public static Window getWindow()
+	{
+		return window;
+	}
 
 	public static void main(String[] args)
 	{
-		Window window = new Window();
-		window.setVisible(true);
+		SwingUtilities.invokeLater(new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				window = new Window();
+				window.setVisible(true);
+			}
+		});
 
 		Connection connection = Database.getConnection();
 		if (connection == null) Database.closeConnection();
