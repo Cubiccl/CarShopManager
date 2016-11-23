@@ -49,12 +49,12 @@ public class PaymentDAO extends DAO<Payment> {
 	public boolean update(Payment obj) {
 		try {
 			this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery(
+					ResultSet.CONCUR_READ_ONLY).executeUpdate(
 					"UPDATE payments SET customerNumber = "
 							+ obj.getCustomerNumber()
-							+ " AND paymentDate = "
+							+ " , paymentDate = "
 							+ new SimpleDateFormat("yyyy-MM-dd").format(obj
-									.getPaymentDate()) + " AND amount = "
+									.getPaymentDate()) + " , amount = "
 							+ obj.getAmount() + " WHERE checkNumber = '"
 							+ obj.getCheckNumber() + "'");
 		} catch (Exception e) {

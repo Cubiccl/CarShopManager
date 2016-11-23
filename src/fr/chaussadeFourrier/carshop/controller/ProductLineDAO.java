@@ -43,7 +43,7 @@ public class ProductLineDAO extends DAO<ProductLine> {
 	public boolean update(ProductLine obj) {
 		try {
 			this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery(
+					ResultSet.CONCUR_READ_ONLY).executeUpdate(
 					"UPDATE productLines SET textDescription = '"
 							+ obj.getTextDescription()
 							+ "' WHERE productLine = '" + obj.getProductLine()

@@ -63,20 +63,20 @@ public class CustomerDAO extends DAO<Customer> {
 		try {
 			this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY)
-					.executeQuery(
+					.executeUpdate(
 							"UPDATE customers SET customerName = '"
 									+ obj.getCustomerName()
-									+ "' AND contactLastName = '"
+									+ "' , contactLastName = '"
 									+ obj.getContactLastName()
-									+ "' AND contactFirstName = '"
+									+ "' , contactFirstName = '"
 									+ obj.getContractFirstName()
-									+ "' AND phone = '" + obj.getPhone()
-									+ "' AND city = '" + obj.getCity()
-									+ "' AND state = '" + obj.getState()
-									+ "' AND postalCode = '"
-									+ obj.getPostalCode() + "' AND country = '"
+									+ "' , phone = '" + obj.getPhone()
+									+ "' , city = '" + obj.getCity()
+									+ "' , state = '" + obj.getState()
+									+ "' , postalCode = '"
+									+ obj.getPostalCode() + "' , country = '"
 									+ obj.getCountry()
-									+ "' AND salesRepEmployeeNumber = "
+									+ "' , salesRepEmployeeNumber = "
 									+ obj.getSalesRepEmployeeNumber()
 									+ " WHERE productLine = "
 									+ obj.getCustomerNumber());

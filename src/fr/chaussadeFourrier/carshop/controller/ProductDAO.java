@@ -85,17 +85,17 @@ public class ProductDAO extends DAO<Product> {
 	public boolean update(Product obj) {
 		try {
 			this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery(
+					ResultSet.CONCUR_READ_ONLY).executeUpdate(
 					"UPDATE products SET productName = '"
-							+ obj.getProductName() + "' AND productLine = '"
-							+ obj.getProductLine() + "' AND photo = "
+							+ obj.getProductName() + "' , productLine = '"
+							+ obj.getProductLine() + "' , photo = "
 							+ imageIconToBlob(obj.getPhoto())
-							+ " AND productVendor = '" + obj.getProductVendor()
-							+ "' AND productDescription = '"
+							+ " , productVendor = '" + obj.getProductVendor()
+							+ "' , productDescription = '"
 							+ obj.getProductDescription()
-							+ "' AND quantityInStock = "
-							+ obj.getQuantityInStock() + " AND buyPrice = "
-							+ obj.getBuyPrice() + " AND MSRP = "
+							+ "' , quantityInStock = "
+							+ obj.getQuantityInStock() + " , buyPrice = "
+							+ obj.getBuyPrice() + " , MSRP = "
 							+ obj.getMSRP() + " WHERE productCode = '"
 							+ obj.getProductCode() + "'");
 		} catch (Exception e) {

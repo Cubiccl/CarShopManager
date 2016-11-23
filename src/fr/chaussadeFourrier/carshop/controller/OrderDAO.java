@@ -59,16 +59,16 @@ public class OrderDAO extends DAO<Order> {
 		try {
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery(
+					ResultSet.CONCUR_READ_ONLY).executeUpdate(
 					"UPDATE orders SET orderDate = "
 							+ df.format(obj.getOrderDate())
-							+ " AND requiredDate = "
+							+ " , requiredDate = "
 							+ df.format(obj.getRequiredDate())
-							+ " AND shippedDate = "
+							+ " , shippedDate = "
 							+ df.format(obj.getShippedDate())
-							+ " AND status = '" + obj.getStatus()
-							+ "' AND comments = '" + obj.getComments()
-							+ "' AND customerNumber = "
+							+ " , status = '" + obj.getStatus()
+							+ "' , comments = '" + obj.getComments()
+							+ "' , customerNumber = "
 							+ obj.getCustomerNumber() + " WHERE OrderNumber = "
 							+ obj.getOrderNumber());
 		} catch (Exception e) {

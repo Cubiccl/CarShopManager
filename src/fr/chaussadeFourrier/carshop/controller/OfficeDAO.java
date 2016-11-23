@@ -56,13 +56,13 @@ public class OfficeDAO extends DAO<Office> {
 	public boolean update(Office obj) {
 		try {
 			this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery(
+					ResultSet.CONCUR_READ_ONLY).executeUpdate(
 					"UPDATE offices SET city = '" + obj.getCity()
-							+ "' AND phone = '" + obj.getPhone()
-							+ "' AND adressLine = '" + obj.getAddressLine()
-							+ "' AND state = '" + obj.getState()
-							+ "' AND country = '" + obj.getCountry()
-							+ "' AND postalCode = '" + obj.getPostalCode()
+							+ "' , phone = '" + obj.getPhone()
+							+ "' , adressLine = '" + obj.getAddressLine()
+							+ "' , state = '" + obj.getState()
+							+ "' , country = '" + obj.getCountry()
+							+ "' , postalCode = '" + obj.getPostalCode()
 							+ "' WHERE officeCode = '" + obj.getOfficeCode()
 							+ "'");
 		} catch (Exception e) {

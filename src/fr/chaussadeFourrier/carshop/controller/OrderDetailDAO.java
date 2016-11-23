@@ -52,11 +52,11 @@ public class OrderDetailDAO extends DAO<OrderDetail> {
 	public boolean update(OrderDetail obj) {
 		try {
 			this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery(
+					ResultSet.CONCUR_READ_ONLY).executeUpdate(
 					"UPDATE orderdetails SET productCode = '"
-							+ obj.getProductCode() + "' AND quantityOrdered = "
-							+ obj.getQuantityOrdered() + " AND priceEach = "
-							+ obj.getPriceEach() + " AND orderLineNumber = "
+							+ obj.getProductCode() + "' , quantityOrdered = "
+							+ obj.getQuantityOrdered() + " , priceEach = "
+							+ obj.getPriceEach() + " , orderLineNumber = "
 							+ obj.getOrderLineNumber()
 							+ " WHERE orderNumber = " + obj.getOrderNumber());
 		} catch (Exception e) {

@@ -56,13 +56,13 @@ public class EmployeeDAO extends DAO<Employee> {
 	public boolean update(Employee obj) {
 		try {
 			this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery(
+					ResultSet.CONCUR_READ_ONLY).executeUpdate(
 					"UPDATE employees SET lastName = '" + obj.getLastName()
-							+ "' AND firstName = '" + obj.getFirstName()
-							+ "' AND email = '" + obj.getEmail()
-							+ "' AND officeCode = '" + obj.getOfficeCode()
-							+ "' AND reportsTo = " + obj.getReportsTo()
-							+ " AND jobTitle = '" + obj.getJobTitle()
+							+ "' , firstName = '" + obj.getFirstName()
+							+ "' , email = '" + obj.getEmail()
+							+ "' , officeCode = '" + obj.getOfficeCode()
+							+ "' , reportsTo = " + obj.getReportsTo()
+							+ " , jobTitle = '" + obj.getJobTitle()
 							+ "' WHERE employeeNumber = "
 							+ obj.getEmployeeNumber());
 		} catch (Exception e) {
