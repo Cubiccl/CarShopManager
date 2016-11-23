@@ -158,19 +158,13 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 
 	private void applyChanges()
 	{
-		try
-		{
-			Database.getConnection()
-					.createStatement()
-					.executeUpdate(
-							"UPDATE products SET productName = '" + this.entryName.getText() + "', quantityInStock = " + this.entryQuantity.getText()
-									+ ", buyPrice = " + this.entryPrice.getText() + ", productDescription = '" + this.areaDescription.getText()
-									+ "' WHERE productCode = '" + this.selectedProduct().getProductCode() + "';");
-			Main.getWindow().setTab(Window.TAB_PRODUCTS);
-		} catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
+		Product p = this.selectedProduct();
+		p.setProductName(this.entryName.getText());
+		p.setProductDescription(this.areaDescription.getText());
+		p.setQuantityInStock((int) Double.parseDouble(this.entryQuantity.getText()));
+		p.setBuyPrice(Double.parseDouble(this.entryPrice.getText()));
+		new ProductDAO(Database.getConnection()).update(p);
+		Main.getWindow().setTab(Window.TAB_PRODUCTS);
 	}
 
 	private String[][] getData()

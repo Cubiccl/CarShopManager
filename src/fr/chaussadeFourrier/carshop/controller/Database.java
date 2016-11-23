@@ -19,8 +19,6 @@ public final class Database
 	private static Connection connection;
 	/** URL to the Database. */
 	public static final String DB_URL = "jdbc:mysql://localhost", DB_NAME = "schemadevobjet";
-	/** Driver for the connection. */
-	private static final String DRIVER = "com.mysql.jdbc.Driver";
 	/** User name and password to access the database. */
 	private static final String USER = "root", PASSWORD = "";
 
@@ -44,7 +42,6 @@ public final class Database
 	{
 		try
 		{
-			Class.forName(DRIVER);
 			System.out.println("Connecting to database...");
 			connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
 			createDatabase(connection);
@@ -53,9 +50,6 @@ public final class Database
 			// If we just created the tables, we also insert the data.
 			if (createTables(connection)) insertData(connection);
 
-		} catch (ClassNotFoundException e)
-		{
-			e.printStackTrace();
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
@@ -68,16 +62,16 @@ public final class Database
 	/** Creates the database.
 	 * 
 	 * @param connection - The connection to the database. */
-	public static void createDatabase(Connection connection)
+	private static void createDatabase(Connection connection)
 	{
-		Statement statement = Database.createStatement(connection);
+		Statement statement = createStatement(connection);
 		if (statement == null) return;
 		try
 		{
 			ResultSet rs = connection.getMetaData().getCatalogs();
 			boolean databasteExists = false;
 			while (rs.next())
-				if (rs.getString(1).equals(Database.DB_NAME)) databasteExists = true;
+				if (rs.getString(1).equals(DB_NAME)) databasteExists = true;
 
 			if (databasteExists) return;
 
@@ -86,7 +80,7 @@ public final class Database
 			e1.printStackTrace();
 		}
 
-		System.out.println("Database doesn't exists! Creating it...");
+		System.out.println("Database doesn't exist! Creating it...");
 		try
 		{
 			statement.executeUpdate("CREATE DATABASE IF NOT EXISTS schemadevobjet");
@@ -118,7 +112,7 @@ public final class Database
 	 * 
 	 * @param connection - The connection to the database.
 	 * @return true if tables were created here, false if they already existed. */
-	public static boolean createTables(Connection connection)
+	private static boolean createTables(Connection connection)
 	{
 		try
 		{
@@ -130,7 +124,7 @@ public final class Database
 		}
 
 		System.out.println("Creating Tables...");
-		Database.executeSQLFile(connection, "res/createTables.sql");
+		executeSQLFile(connection, "res/createTables.sql");
 		return true;
 	}
 
@@ -167,10 +161,10 @@ public final class Database
 	/** Inserts the data into the database.
 	 * 
 	 * @param connection - The connection to the database. */
-	public static void insertData(Connection connection)
+	private static void insertData(Connection connection)
 	{
 		System.out.println("Creating Data...");
-		Database.executeSQLFile(connection, "res/SampleData2016.sql");
+		executeSQLFile(connection, "res/SampleData2016.sql");
 	}
 
 	/** @param filepath - The path to the file containing SQL queries.
