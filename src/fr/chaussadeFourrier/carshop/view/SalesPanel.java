@@ -80,7 +80,7 @@ public class SalesPanel extends JSplitPane implements ActionListener
 		boolean hasCountry = !country.equals("All");
 		boolean hasStart = isDateValid(start), hasEnd = isDateValid(end);
 
-		String request = "SELECT orders.orderNumber, orderDate, priceEach * quantityOrdered FROM customers JOIN orders JOIN orderDetails";
+		String request = "SELECT orders.orderNumber, orderDate, priceEach * quantityOrdered FROM customers JOIN orders ON customers.customerNumber = orders.customerNumber JOIN orderDetails ON orders.orderNumber = orderDetails.orderNumber";
 		if (hasCountry || hasStart || hasEnd) request += " WHERE";
 
 		if (hasCountry) request += " country = '" + country + "'";
@@ -95,14 +95,14 @@ public class SalesPanel extends JSplitPane implements ActionListener
 
 		request += ";";
 		System.out.println("Request is: " + request);
-		/*
+
 		try
 		{
 			ResultSet rs = Database.getConnection().createStatement().executeQuery(request);
-			System.out.println("done");
+			while (rs.next()) System.out.println(rs.getString(2));
 		} catch (SQLException e1)
 		{
 			e1.printStackTrace();
-		}*/
+		}
 	}
 }
