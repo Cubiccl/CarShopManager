@@ -19,6 +19,7 @@ public class Window extends JFrame implements ActionListener
 	 * </ul> */
 	public static final int TAB_PRODUCTS = 0, TAB_SALES = 1, TAB_FREE = 2;
 
+	/** Menu buttons. */
 	private CMenuItem menuProducts, menuSales, menuFree;
 
 	public Window()
@@ -40,6 +41,7 @@ public class Window extends JFrame implements ActionListener
 		if (e.getSource() == this.menuFree) this.setTab(TAB_FREE);
 	}
 
+	/** Creates the window's menu bar. */
 	private void createMenuBar()
 	{
 

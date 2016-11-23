@@ -17,8 +17,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import fr.chaussadeFourrier.carshop.Main;
+import fr.chaussadeFourrier.carshop.controller.DAOFactory;
 import fr.chaussadeFourrier.carshop.controller.Database;
-import fr.chaussadeFourrier.carshop.controller.ProductDAO;
 import fr.chaussadeFourrier.carshop.model.Product;
 import fr.cubi.cubigui.CButton;
 import fr.cubi.cubigui.CEntry;
@@ -27,20 +27,48 @@ import fr.cubi.cubigui.CPanel;
 import fr.cubi.cubigui.CTable;
 import fr.cubi.cubigui.CTextArea;
 
+/** Panel showing all available products, and allows product editing. */
 public class ProductsPanel extends JSplitPane implements ActionListener, ListSelectionListener
 {
+	/** Column names */
 	private static final String[] COLUMNS =
 	{ "Product code", "Product Name", "Quantity in Stock", "Buy Price" };
+
 	private static final long serialVersionUID = -7058499330472853742L;
 
-	private CTextArea areaDescription, areaProductLineDescription;
-	private CButton buttonShow, buttonCancel, buttonValidate;
+	/** Displays the description of the product. Can be edited. */
+	private CTextArea areaDescription;
+	/** Displays the description of the product line. */
+	private CTextArea areaProductLineDescription;
+	/** When pressed, cancels changes done to the product. */
+	private CButton buttonCancel;
+	/** When pressed, shows or hides the product details. */
+	private CButton buttonShow;
+	/** When pressed, validates the changes made to the product. */
+	private CButton buttonValidate;
+	/** True if the details of the product are show. */
 	private boolean detailsShowed;
-	private CEntry entryName, entryQuantity, entryPrice;
-	private CLabel labelCode, labelVendor, labelMSRP;
+	/** Displays the name of the product. Can be edited. */
+	private CEntry entryName;
+	/** Displays the buy price of the product. Can be edited. */
+	private CEntry entryPrice;
+	/** Displays the quantity of the product in stock. Can be edited. */
+	private CEntry entryQuantity;
+	/** Displays the product code. */
+	private CLabel labelCode;
+	/** Displays the product image. */
 	private JLabel labelImage;
-	private CPanel panelList, panelDetails;
-	private JScrollPane scrollpaneTable, scrollpaneDetails;
+	/** Displays the product MSRP. */
+	private CLabel labelMSRP;
+	/** Displays the product vendor. */
+	private CLabel labelVendor;
+	/** Bottom panel, contains all the product details. */
+	private CPanel panelDetails;
+	/** Top panel, contains the list of all products. */
+	private CPanel panelList;
+	private JScrollPane scrollpaneDetails;
+	private JScrollPane scrollpaneTable;
+	/** Table displaying the list of products. */
 	private CTable table;
 
 	public ProductsPanel()
@@ -60,8 +88,8 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 				return false;
 			}
 		};
-		this.buttonShow = new CButton("Show details");
 
+		this.buttonShow = new CButton("Show details");
 		this.panelList = new CPanel("Product list");
 		this.panelDetails = new CPanel("Product details");
 
@@ -156,6 +184,7 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 		else if (e.getSource() == this.buttonCancel) this.showDetails(this.selectedProduct());
 	}
 
+	/** Applies changes to the selected product. Called when the "Validate changes" button is pressed. */
 	private void applyChanges()
 	{
 		Product p = this.selectedProduct();
@@ -163,10 +192,11 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 		p.setProductDescription(this.areaDescription.getText());
 		p.setQuantityInStock((int) Double.parseDouble(this.entryQuantity.getText()));
 		p.setBuyPrice(Double.parseDouble(this.entryPrice.getText()));
-		new ProductDAO(Database.getConnection()).update(p);
+		DAOFactory.getProductDAO().update(p);
 		Main.getWindow().setTab(Window.TAB_PRODUCTS);
 	}
 
+	/** @return The data to display in the table. [row][column]. Columns are: code, name, quantity, price. */
 	private String[][] getData()
 	{
 		try
@@ -191,17 +221,22 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 		return new String[0][0];
 	}
 
+	/** Resizes the table to match the window dimensions. Called when resized. */
 	private void resizeTable()
 	{
 		this.setDividerLocation(Math.max(200, this.getDividerLocation()));
 		this.scrollpaneTable.setPreferredSize(new Dimension(this.table.getWidth() + 30, this.getDividerLocation() - 100));
 	}
 
+	/** @return The currently selected product in the table. */
 	private Product selectedProduct()
 	{
-		return new ProductDAO(Database.getConnection()).find((String) this.table.getValueAt(this.table.getSelectedRow(), 0));
+		return DAOFactory.getProductDAO().find((String) this.table.getValueAt(this.table.getSelectedRow(), 0));
 	}
 
+	/** Fills the details with the input product's details.
+	 * 
+	 * @param product - The product to show. */
 	public void showDetails(Product product)
 	{
 		if (product == null) return;
@@ -221,6 +256,7 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 		this.labelImage.setIcon(product.getPhoto());
 	}
 
+	/** Toggles visibility of the products on/off. */
 	private void toggleDetails()
 	{
 		this.detailsShowed = !this.detailsShowed;

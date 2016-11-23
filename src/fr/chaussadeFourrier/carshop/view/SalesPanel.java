@@ -26,22 +26,24 @@ import fr.cubi.cubigui.CComboBox;
 import fr.cubi.cubigui.CEntry;
 import fr.cubi.cubigui.CPanel;
 
+/** Panel displaying sales based on dates. */
 public class SalesPanel extends JSplitPane implements ActionListener, FocusListener
 {
 
 	private static final long serialVersionUID = 4654999826343276791L;
 
-	private static final String SERIES = "SALES";
-
+	/** @return The list of countries where there have been sales. */
 	private static String[] getCountries()
 	{
 		try
 		{
+			// Retrieving all countries from database
 			ResultSet rs = Database.getConnection().createStatement().executeQuery("SELECT DISTINCT country FROM customers;");
 			ArrayList<String> countries = new ArrayList<String>();
 			while (rs.next())
 				countries.add(rs.getString(1));
 
+			// Sort countries alphabetically
 			countries.sort(new Comparator<String>()
 			{
 				@Override
@@ -51,6 +53,7 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 				}
 			});
 
+			// Add all before first
 			String[] toreturn = new String[countries.size() + 1];
 			toreturn[0] = "All";
 			for (int i = 1; i < toreturn.length; ++i)
@@ -66,7 +69,7 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 	}
 
 	/** @param date - date to test.
-	 * @return true if the input date is a valid date. */
+	 * @return true if the input date is a valid date. (Format: YYYY-MM-DD) */
 	private static boolean isDateValid(String date)
 	{
 		try
@@ -84,19 +87,23 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 		return true;
 	}
 
+	/** Button to load the graph when pressed. */
 	private CButton buttonLoad;
-
+	/** Combobox used to select teh country. */
 	private CComboBox comboboxCountry;
+	/** Dataset used to display the graph. */
 	private DefaultCategoryDataset dataset;
+	/** Entries to input the starting and ending date. */
 	private CEntry entryBeginDate, entryEndDate;
-
+	/** Panel containing the graph. */
 	private CPanel panelResult;
 
 	public SalesPanel()
 	{
 		super(VERTICAL_SPLIT);
-		CPanel panelTop = new CPanel("Criterias");
 
+		// Creating the top panel, with search criteria
+		CPanel panelTop = new CPanel("Search criteria");
 		panelTop.add(this.comboboxCountry = new CComboBox(getCountries()));
 		panelTop.add((this.entryBeginDate = new CEntry("Begin date :", "DD-MM-YYYY")).container);
 		panelTop.add((this.entryEndDate = new CEntry("End date :", "DD-MM-YYYY")).container);
@@ -109,6 +116,7 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 		this.entryEndDate.addFocusListener(this);
 		this.buttonLoad.addActionListener(this);
 
+		// Creating the bottom panel, with the graph
 		JFreeChart chart = ChartFactory.createLineChart("Sales :", "Date", "Sales", this.dataset = new DefaultCategoryDataset());
 		chart.getCategoryPlot().getDomainAxis().setTickLabelFont(new Font("Consolas", Font.PLAIN, 8));
 		this.panelResult = new CPanel("Result");
@@ -122,6 +130,7 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
+		// Prepare calculations
 		this.dataset.clear();
 		String country = this.comboboxCountry.getValue();
 		String start = Month.fromDMYtoYMD(this.entryBeginDate.getText());
@@ -180,7 +189,7 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 
 			// Insert data
 			for (Month m : times)
-				this.dataset.addValue(map.get(m), SERIES, m);
+				this.dataset.addValue(map.get(m), "Sales", m);
 
 		} catch (SQLException e1)
 		{

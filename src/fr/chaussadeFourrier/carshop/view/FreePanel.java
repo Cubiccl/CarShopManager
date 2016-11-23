@@ -37,6 +37,7 @@ import fr.cubi.cubigui.CPanel;
 import fr.cubi.cubigui.CTable;
 import fr.cubi.cubigui.CTextArea;
 
+/** Panel used to input any SELECT SQL request and show its results. */
 public class FreePanel extends JSplitPane implements ActionListener,
 		KeyListener, FocusListener {
 	private static final long serialVersionUID = 2163073256397683674L;
@@ -100,7 +101,9 @@ public class FreePanel extends JSplitPane implements ActionListener,
 		this.setVisible(true);
 	}
 
-	// Save the data in a log file
+	/** Saves the result of the input query into a log file.
+	 * @param query - The input query.
+	 * @param rs - The resulting set. */
 	public void saveToFile(String query, ResultSet rs) {
 		try {
 			// Log file change with date time
