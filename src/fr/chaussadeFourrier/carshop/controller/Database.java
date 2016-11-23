@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public final class Database
 	/** The Connection to the Database. */
 	private static Connection connection;
 	/** URL to the Database. */
-	private static final String DB_URL = "jdbc:mysql://localhost/schemadevobjet";
+	public static final String DB_URL = "jdbc:mysql://localhost", DB_NAME = "schemadevobjet";
 	/** Driver for the connection. */
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
 	/** User name and password to access the database. */
@@ -46,6 +47,12 @@ public final class Database
 			Class.forName(DRIVER);
 			System.out.println("Connecting to database...");
 			connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+			createDatabase(connection);
+
+			connection = DriverManager.getConnection(DB_URL + "/" + DB_NAME, USER, PASSWORD);
+			// If we just created the tables, we also insert the data.
+			if (createTables(connection)) insertData(connection);
+
 		} catch (ClassNotFoundException e)
 		{
 			e.printStackTrace();
@@ -56,6 +63,38 @@ public final class Database
 
 		if (connection != null) System.out.println("Connected !");
 		else System.out.println("Connection failed.");
+	}
+
+	/** Creates the database.
+	 * 
+	 * @param connection - The connection to the database. */
+	public static void createDatabase(Connection connection)
+	{
+		Statement statement = Database.createStatement(connection);
+		if (statement == null) return;
+		try
+		{
+			ResultSet rs = connection.getMetaData().getCatalogs();
+			boolean databasteExists = false;
+			while (rs.next())
+				if (rs.getString(1).equals(Database.DB_NAME)) databasteExists = true;
+
+			if (databasteExists) return;
+
+		} catch (SQLException e1)
+		{
+			e1.printStackTrace();
+		}
+
+		System.out.println("Database doesn't exists! Creating it...");
+		try
+		{
+			statement.executeUpdate("CREATE DATABASE IF NOT EXISTS schemadevobjet");
+			System.out.println("Database 'schemadevojet' created !");
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	/** Creates a Statement for the Database.
@@ -73,6 +112,26 @@ public final class Database
 		}
 
 		return null;
+	}
+
+	/** Creates the database tables.
+	 * 
+	 * @param connection - The connection to the database.
+	 * @return true if tables were created here, false if they already existed. */
+	public static boolean createTables(Connection connection)
+	{
+		try
+		{
+			ResultSet rs = connection.getMetaData().getTables(null, null, "%", null);
+			if (rs.next()) return false;
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+
+		System.out.println("Creating Tables...");
+		Database.executeSQLFile(connection, "res/createTables.sql");
+		return true;
 	}
 
 	/** Executes the content of an SQL file. Values returned by SELECT queries are not returned.
@@ -103,6 +162,15 @@ public final class Database
 	{
 		if (connection == null) createConnection();
 		return connection;
+	}
+
+	/** Inserts the data into the database.
+	 * 
+	 * @param connection - The connection to the database. */
+	public static void insertData(Connection connection)
+	{
+		System.out.println("Creating Data...");
+		Database.executeSQLFile(connection, "res/SampleData2016.sql");
 	}
 
 	/** @param filepath - The path to the file containing SQL queries.

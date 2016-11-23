@@ -20,16 +20,16 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JOptionPane;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
-import fr.chaussadeFourrier.carshop.controller.MaConnexion;
+import fr.chaussadeFourrier.carshop.controller.Database;
 import fr.cubi.cubigui.CButton;
 import fr.cubi.cubigui.CPanel;
 import fr.cubi.cubigui.CTable;
@@ -228,7 +228,7 @@ public class FreePanel extends JSplitPane implements ActionListener,
 		
 		
 		// Connect to database
-		Connection connect = MaConnexion.getInstance();
+		Connection connect = Database.getConnection();
 		try {
 			// Execute query
 			ResultSet rs = connect.createStatement(

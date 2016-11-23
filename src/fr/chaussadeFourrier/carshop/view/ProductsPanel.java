@@ -4,6 +4,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -11,6 +13,7 @@ import javax.swing.JSplitPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import fr.chaussadeFourrier.carshop.controller.Database;
 import fr.chaussadeFourrier.carshop.model.Product;
 import fr.cubi.cubigui.CButton;
 import fr.cubi.cubigui.CEntry;
@@ -40,12 +43,7 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 
 		this.detailsShowed = false;
 
-		String[][] data = new String[][]
-		{
-		{ "001", "Car 1", "42", "1337€" },
-		{ "002", "Car 2", "69", "666 666€" } };
-
-		this.table = new CTable(data, COLUMNS)
+		this.table = new CTable(new String[0][0], COLUMNS)
 		{
 			private static final long serialVersionUID = -6588307240212217769L;
 
@@ -125,6 +123,7 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 
 		this.setTopComponent(new JScrollPane(this.panelList));
 		this.setBottomComponent(new JScrollPane(this.panelDetails));
+		this.updateProducts();
 	}
 
 	@Override
@@ -171,6 +170,12 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 		this.panelDetails.setVisible(this.detailsShowed);
 		if (this.detailsShowed) this.buttonShow.setText("Hide details");
 		else this.buttonShow.setText("Show details");
+	}
+
+	private void updateProducts()
+	{
+		//ResultSet rs= Database.getConnection().createStatement().executeQuery("select");
+		
 	}
 
 	@Override

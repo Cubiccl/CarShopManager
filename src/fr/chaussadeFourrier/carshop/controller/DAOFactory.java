@@ -11,7 +11,7 @@ import fr.chaussadeFourrier.carshop.model.Product;
 import fr.chaussadeFourrier.carshop.model.ProductLine;
 
 public class DAOFactory {
-	protected static final Connection conn = MaConnexion.getInstance();
+	protected static final Connection conn = Database.getConnection();
 	
 	public static DAO<?> getCustomerDAO(){
 		return new CustomerDAO(conn);
