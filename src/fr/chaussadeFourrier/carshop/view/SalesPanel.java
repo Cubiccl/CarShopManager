@@ -142,9 +142,7 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 			if (hasStart && hasEnd) query += " AND";
 			if (hasEnd) query += " orderDate <= '" + end + "'";
 		}
-
 		query += ";";
-		System.out.println("Request is: " + query);
 
 		try
 		{

@@ -42,7 +42,6 @@ public final class Database
 	{
 		try
 		{
-			System.out.println("Connecting to database...");
 			connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
 			createDatabase(connection);
 
@@ -54,9 +53,6 @@ public final class Database
 		{
 			e.printStackTrace();
 		}
-
-		if (connection != null) System.out.println("Connected !");
-		else System.out.println("Connection failed.");
 	}
 
 	/** Creates the database.
