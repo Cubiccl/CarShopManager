@@ -13,3 +13,4 @@ hs_err_pid*
 /bin/
 Log.txt
 *.classpath
+/Logs/
