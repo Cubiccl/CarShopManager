@@ -191,15 +191,7 @@ public class FreePanel extends JSplitPane implements ActionListener,
 						bw.write("...");
 						bw.write("|");
 					} else if (rsmd.getColumnDisplaySize(i) > 100) {
-						buff = rs.getString(i).replaceAll("[\\v\\h\\s]"," ");
-						buff = rs.getString(i);
-						/*
-						 * In case of some lines contains vertical whitespace which match none of unicode characters spacings referenced on wikipedia
-						 */
-						if(buff.indexOf("Measures approximately 9 1/2\" Long.") != -1){							// Il y a toujours une solution à un problème.
-							buff = buff.substring(0,buff.indexOf("Measures approximately 9 1/2\" Long.")-1);	// t('-'t)
-							buff = buff + "  Measures approximately 9 1/2\" Long.     ";						// t('-'t)
-						}					
+						buff = rs.getString(i).replaceAll("[\\v\\h\\s]"," ");		
 						bw.write(buff);
 						for (int j = 0; j < 100 - buff.length(); j++)
 							bw.write(" ");
@@ -268,7 +260,7 @@ public class FreePanel extends JSplitPane implements ActionListener,
 
 		if(text.indexOf(";") != -1)
 			text = text.substring(0, text.indexOf(";"));
-		text = text.replaceAll("\\n", " ");
+		text = text.replaceAll("\\s", " ");
 		text = text.replaceAll(" +", " ");
 
 		textField.setText(text);
