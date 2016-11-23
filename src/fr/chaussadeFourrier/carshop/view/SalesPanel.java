@@ -33,6 +33,38 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 
 	private static final String SERIES = "SALES";
 
+	private static String[] getCountries()
+	{
+		try
+		{
+			ResultSet rs = Database.getConnection().createStatement().executeQuery("SELECT DISTINCT country FROM customers;");
+			ArrayList<String> countries = new ArrayList<String>();
+			while (rs.next())
+				countries.add(rs.getString(1));
+
+			countries.sort(new Comparator<String>()
+			{
+				@Override
+				public int compare(String o1, String o2)
+				{
+					return o1.compareTo(o2);
+				}
+			});
+
+			String[] toreturn = new String[countries.size() + 1];
+			toreturn[0] = "All";
+			for (int i = 1; i < toreturn.length; ++i)
+				toreturn[i] = countries.get(i - 1);
+			return toreturn;
+
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return new String[]
+		{ "All" };
+	}
+
 	/** @param date - date to test.
 	 * @return true if the input date is a valid date. */
 	private static boolean isDateValid(String date)
@@ -55,9 +87,9 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 	private CButton buttonLoad;
 
 	private CComboBox comboboxCountry;
-
 	private DefaultCategoryDataset dataset;
 	private CEntry entryBeginDate, entryEndDate;
+
 	private CPanel panelResult;
 
 	public SalesPanel()
@@ -65,9 +97,9 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 		super(VERTICAL_SPLIT);
 		CPanel panelTop = new CPanel("Criterias");
 
-		panelTop.add(this.comboboxCountry = new CComboBox("All", "France", "United States of Antartica"));
-		panelTop.add((this.entryBeginDate = new CEntry("Begin date :", "YYYY-MM-DD")).container);
-		panelTop.add((this.entryEndDate = new CEntry("End date :", "YYYY-MM-DD")).container);
+		panelTop.add(this.comboboxCountry = new CComboBox(getCountries()));
+		panelTop.add((this.entryBeginDate = new CEntry("Begin date :", "DD-MM-YYYY")).container);
+		panelTop.add((this.entryEndDate = new CEntry("End date :", "DD-MM-YYYY")).container);
 		panelTop.add(this.buttonLoad = new CButton("Load"));
 
 		this.entryBeginDate.setColumns(6);
@@ -92,8 +124,8 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 	{
 		this.dataset.clear();
 		String country = this.comboboxCountry.getValue();
-		String start = this.entryBeginDate.getText();
-		String end = this.entryEndDate.getText();
+		String start = Month.fromDMYtoYMD(this.entryBeginDate.getText());
+		String end = Month.fromDMYtoYMD(this.entryEndDate.getText());
 		boolean hasCountry = !country.equals("All");
 		boolean hasStart = isDateValid(start), hasEnd = isDateValid(end);
 
@@ -161,14 +193,14 @@ public class SalesPanel extends JSplitPane implements ActionListener, FocusListe
 	@Override
 	public void focusGained(FocusEvent e)
 	{
-		if (((CEntry) e.getSource()).getText().trim().equals("YYYY-MM-DD")) ((CEntry) e.getSource()).setText("");
+		if (((CEntry) e.getSource()).getText().trim().equals("DD-MM-YYYY")) ((CEntry) e.getSource()).setText("");
 
 	}
 
 	@Override
 	public void focusLost(FocusEvent e)
 	{
-		if (((CEntry) e.getSource()).getText().trim().equals("")) ((CEntry) e.getSource()).setText("YYYY-MM-DD");
+		if (((CEntry) e.getSource()).getText().trim().equals("")) ((CEntry) e.getSource()).setText("DD-MM-YYYY");
 
 	}
 }

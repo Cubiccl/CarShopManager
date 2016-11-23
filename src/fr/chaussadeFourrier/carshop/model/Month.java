@@ -5,6 +5,17 @@ public class Month implements Comparable<Month>
 	public static final String[] MONTH_NAMES =
 	{ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 
+	public static String fromDMYtoYMD(String from)
+	{
+		try
+		{
+			return from.substring(6, 10) + "-" + from.substring(3, 5) + "-" + from.substring(0, 2);
+		} catch (Exception e)
+		{
+			return null;
+		}
+	}
+
 	public final int month, year;
 
 	public Month(int month, int year)
