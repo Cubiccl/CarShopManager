@@ -5,6 +5,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -37,6 +39,7 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 	private CLabel labelCode, labelVendor, labelMSRP;
 	private JLabel labelImage;
 	private CPanel panelList, panelDetails;
+	private JScrollPane scrollpaneTable;
 	private CTable table;
 
 	public ProductsPanel()
@@ -65,7 +68,9 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 		GridBagConstraints gbc = this.panelList.createGridBagLayout();
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.anchor = GridBagConstraints.NORTH;
-		this.panelList.add(this.table.container, gbc);
+		this.panelList.add(this.scrollpaneTable = new JScrollPane(this.table.container), gbc);
+		this.scrollpaneTable.getVerticalScrollBar().setUnitIncrement(20);
+		this.scrollpaneTable.setBorder(null);
 
 		gbc.gridy = 2;
 		gbc.fill = GridBagConstraints.NONE;
@@ -127,8 +132,16 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 		this.buttonValidate.addActionListener(this);
 		this.buttonCancel.addActionListener(this);
 
-		this.setTopComponent(new JScrollPane(this.panelList));
+		this.setTopComponent(this.panelList);
 		this.setBottomComponent(new JScrollPane(this.panelDetails));
+		this.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener()
+		{
+			@Override
+			public void propertyChange(PropertyChangeEvent pce)
+			{
+				resizeTable();
+			}
+		});
 	}
 
 	@Override
@@ -167,6 +180,12 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 			e.printStackTrace();
 		}
 		return new String[0][0];
+	}
+
+	private void resizeTable()
+	{
+		this.setDividerLocation(Math.max(200, this.getDividerLocation()));
+		this.scrollpaneTable.setPreferredSize(new Dimension(this.table.getWidth() + 30, this.getDividerLocation() - 100));
 	}
 
 	private Product selectedProduct()
