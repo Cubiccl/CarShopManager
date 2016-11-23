@@ -1,11 +1,12 @@
 package fr.chaussadeFourrier.carshop.view;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -14,6 +15,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import fr.chaussadeFourrier.carshop.controller.Database;
+import fr.chaussadeFourrier.carshop.controller.ProductDAO;
 import fr.chaussadeFourrier.carshop.model.Product;
 import fr.cubi.cubigui.CButton;
 import fr.cubi.cubigui.CEntry;
@@ -43,7 +45,7 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 
 		this.detailsShowed = false;
 
-		this.table = new CTable(new String[0][0], COLUMNS)
+		this.table = new CTable(this.getData(), COLUMNS)
 		{
 			private static final long serialVersionUID = -6588307240212217769L;
 
@@ -88,7 +90,9 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 		++gbc.gridx;
 		gbc.anchor = GridBagConstraints.NORTH;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		this.panelDetails.add(this.areaDescription = new CTextArea("This is the car's description."), gbc);
+		JScrollPane scrollpane = new JScrollPane(this.areaDescription = new CTextArea("This is the car's description."));
+		scrollpane.setPreferredSize(new Dimension(400, 100));
+		this.panelDetails.add(scrollpane, gbc);
 		this.areaDescription.setEditable(true);
 
 		--gbc.gridx;
@@ -112,8 +116,10 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 		++gbc.gridy;
 		--gbc.gridwidth;
 		gbc.insets = new Insets(50, 5, 5, 5);
+		gbc.anchor = GridBagConstraints.EAST;
 		this.panelDetails.add(this.buttonValidate = new CButton("Validate changes"), gbc);
 		++gbc.gridx;
+		gbc.anchor = GridBagConstraints.WEST;
 		this.panelDetails.add(this.buttonCancel = new CButton("Cancel changes"), gbc);
 
 		this.table.getSelectionModel().addListSelectionListener(this);
@@ -123,7 +129,6 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 
 		this.setTopComponent(new JScrollPane(this.panelList));
 		this.setBottomComponent(new JScrollPane(this.panelDetails));
-		this.updateProducts();
 	}
 
 	@Override
@@ -140,11 +145,33 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 
 	}
 
+	private String[][] getData()
+	{
+		try
+		{
+			ResultSet rs = Database.getConnection().createStatement().executeQuery("SELECT productCode, productName, quantityInStock, buyPrice FROM products;");
+			rs.last();
+			int size = rs.getRow();
+			rs.beforeFirst();
+			String[][] data = new String[size][4];
+			int curr = 0;
+			while (rs.next())
+			{
+				data[curr] = new String[]
+				{ rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4) };
+				++curr;
+			}
+			return data;
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return new String[0][0];
+	}
+
 	private Product selectedProduct()
 	{
-		System.out.println("Selected: " + this.table.getSelectedRow());
-		// TODO Auto-generated method stub
-		return null;
+		return new ProductDAO(Database.getConnection()).find((String) this.table.getValueAt(this.table.getSelectedRow(), 0));
 	}
 
 	public void showDetails(Product product)
@@ -161,6 +188,8 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 		this.labelVendor.setText("Product vendor :" + product.getProductVendor());
 		this.labelMSRP.setText("Product MSRP :" + product.getMSRP());
 
+		if (product.getPhoto() == null) this.labelImage.setText("[image unavailable]");
+		else this.labelImage.setText("");
 		this.labelImage.setIcon(product.getPhoto());
 	}
 
@@ -170,12 +199,6 @@ public class ProductsPanel extends JSplitPane implements ActionListener, ListSel
 		this.panelDetails.setVisible(this.detailsShowed);
 		if (this.detailsShowed) this.buttonShow.setText("Hide details");
 		else this.buttonShow.setText("Show details");
-	}
-
-	private void updateProducts()
-	{
-		//ResultSet rs= Database.getConnection().createStatement().executeQuery("select");
-		
 	}
 
 	@Override

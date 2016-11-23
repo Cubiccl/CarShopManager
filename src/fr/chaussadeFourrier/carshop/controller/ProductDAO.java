@@ -115,7 +115,9 @@ public class ProductDAO extends DAO<Product> {
 					"SELECT * FROM products WHERE productCode = '" + id + "'");
 			if (result.first()) {
 				Blob blob = result.getBlob("photo");
-				ImageIcon photo = new ImageIcon(blob.getBytes(1L,
+				ImageIcon photo;
+				if (blob == null) photo = null;
+				else photo = new ImageIcon(blob.getBytes(1L,
 						(int) blob.length()));
 				product = new Product(id, result.getString("productName"),
 						result.getString("productLine"), photo,
