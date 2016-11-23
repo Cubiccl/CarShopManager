@@ -9,7 +9,6 @@ import javax.swing.SwingUtilities;
 
 import fr.chaussadeFourrier.carshop.controller.Database;
 import fr.chaussadeFourrier.carshop.view.Window;
-import fr.cubi.cubigui.DisplayUtils;
 
 public class Main
 {
@@ -22,13 +21,6 @@ public class Main
 
 	public static void main(String[] args)
 	{
-		Connection connection = Database.getConnection();
-		if (connection == null)
-		{
-			DisplayUtils.showMessage(null, "Error", "Could not connect to database. Exiting");
-			Database.closeConnection();
-		}
-
 		SwingUtilities.invokeLater(new Runnable()
 		{
 
@@ -39,6 +31,9 @@ public class Main
 				window.setVisible(true);
 			}
 		});
+
+		Connection connection = Database.getConnection();
+		if (connection == null) Database.closeConnection();
 	}
 
 	/** Requests and displays the Customers from a country that ordered in a year.

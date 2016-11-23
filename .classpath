@@ -3,12 +3,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="C:/Users/Clément/Documents/Fac/Java/TP2/mysql-connector-java-5.1.33-bin.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Clément/Desktop/Programmation/CubiGui/CubiGui v1.1.1.jar" sourcepath="C:/Users/Clément/Desktop/Programmation/CubiGui/source.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/Users/Clément/Desktop/Programmation/CubiGui/doc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Clément/Documents/Fac/Java/jfreechart-1.0.19/jfreechart-1.0.19/lib/jcommon-1.0.23.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Clément/Documents/Fac/Java/jfreechart-1.0.19/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar" sourcepath="C:/Users/Clément/Documents/Fac/Java/jfreechart-1.0.19/jfreechart-1.0.19/source"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
